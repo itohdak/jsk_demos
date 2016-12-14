@@ -6,103 +6,69 @@
 (ros::load-ros-manifest "roseus")
 
 (ros::roseus "inkan")
-;;(ros::advertise "go_to_room" std_msgs::string 1)
-(ros::advertise "pick_up" std_msgs::string 1) ;;要相談
+(ros::advertise "pick_up" std_msgs::string 1)
 
 (defun inkan nil
-  ;;受け取った荷物を置く
-  #|
-  (send *ri* :angle-vector
-	(send *fetch* :inverse-kinematics
-	      (make-coords :pos #f(400 400 1000))) 5000)
+  (send *ri* :angle-vector (send *fetch* :reset-pose))
   (send *ri* :wait-interpolation)
-  ;;(unix:sleep 7)
-  (send *ri* :stop-grasp :effort 30)
-  |#
   (send *ri* :stop-grasp :effort 30)
 
   ;;印鑑を握る
-  (send *ri* :angle-vector #f(13.4507 -68.0538 6.02191 -104.249 87.3323 2.90398 104.686 76.432 8.0667 1.39715))
+  (send *ri* :angle-vector #f(19.8442 -75.8265 1.95537 -100.456 81.2313 1.82956 112.141 76.7399 0.0 0.0))
   (send *ri* :wait-interpolation)
 
-  (send *ri* :angle-vector #f(13.4507 -67.0325 6.62849 -103.939 97.1639 3.2024 95.9892 76.716 8.0667 1.39715))
+  (send *ri* :angle-vector #f(19.8442 -73.5364 2.84919 -100.313 95.7357 2.19163 100.054 76.3608 0.0 0.0))
   (send *ri* :wait-interpolation)
-
-  ;;(send *ri* :angle-vector
-  ;;	(send *fetch* :inverse-kinematics
-  ;;	      (make-coords :pos #f(450 -400 1100))) 5000)
-  ;;(send *ri* :wait-interpolation)
-  
-  ;;(send *ri* :angle-vector
-  ;;	(send *fetch* :inverse-kinematics
-  ;;	      (make-coords :pos #f(450 -400 1000))) 2000)
-  ;;(send *ri* :wait-interpolation)
 
   ;;印鑑を持ち上げる
   (send *ri* :start-grasp :effort 50)
-  (send *ri* :angle-vector #f(13.4507 -68.1333 -0.222329 -109.902 94.7688 -4.13147 95.2902 71.946 8.0667 1.39715))
+  (unix:sleep 1)
+  (send *ri* :angle-vector-raw #f(19.8442 -75.3974 -6.85464 -108.317 91.8183 -8.54583 99.3381 68.8498 0.0 0.0) 5000)
+  (send *ri* :wait-interpolation)
+  (send *ri* :angle-vector-raw #f(19.8442 -77.8321 -6.77513 -107.537 77.3032 -8.10757 111.531 67.5958 0.0 0.0) 5000)
   (send *ri* :wait-interpolation)
   
   ;;印鑑を押す
   (send *ri* :angle-vector
-	(send *fetch* :inverse-kinematics
-	      (make-coords :pos #f(800 0 1000))) 5000)
-  (send *ri* :wait-interpolation)
+  	(send *fetch* :inverse-kinematics
+  	      (make-coords :pos #f(800 0 1000))) 5000)
+  (send *ri* :wait-interpolation)  
+
+  (send *ri* :speak "Please set the paper." :wait t)
   
   (send *ri* :angle-vector
 	(send *fetch* :inverse-kinematics
 	      (make-coords :pos #f(800 0 900))) 500)
   (send *ri* :wait-interpolation)
-  
-  ;;(send *ri* :speak "please set the paper" :wait t)
+
   (send *ri* :angle-vector
 	(send *fetch* :inverse-kinematics
 	      (make-coords :pos #f(800 0 1000))) 500)
   (send *ri* :wait-interpolation)
-  ;;(send *ri* :speak "thank you" :wait t)
+  (send *ri* :speak "Thank you." :wait t)
   
 
   ;;印鑑を元に戻す
-  (send *ri* :angle-vector #f(13.4507 -68.1333 -0.222329 -109.902 94.7688 -4.13147 95.2902 71.946 8.0667 1.39715))
+  (send *ri* :angle-vector #f(19.8442 -75.3974 -6.85464 -108.317 91.8183 -8.54583 99.3381 68.8498 0.0 0.0))
   (send *ri* :wait-interpolation)
-
-  (send *ri* :angle-vector #f(13.4507 -67.0325 6.62849 -103.939 97.1639 3.2024 95.9892 76.716 8.0667 1.39715))
+  (send *ri* :angle-vector-raw #f(19.8442 -74.0122 -0.183408 -102.661 95.0663 -1.2509 99.6699 74.272 0.0 0.0) 5000)
   (send *ri* :wait-interpolation)
-
-  ;;(send *ri* :angle-vector
-  ;;	(send *fetch* :inverse-kinematics
-  ;;	      (make-coords :pos #f(450 -400 1000))) 5000)
-  ;;(send *ri* :wait-interpolation)
   
   (send *ri* :stop-grasp :effort 30)
+  (unix:sleep 1)
 
-  (send *ri* :angle-vector #f(13.4507 -68.0538 6.02191 -104.249 87.3323 2.90398 104.686 76.432 8.0667 1.39715))
+  (send *ri* :angle-vector-raw #f(19.8442 -77.819 -1.21048 -102.294 73.5982 -1.50427 117.202 74.1464 0.0 0.0))
   (send *ri* :wait-interpolation)
-
-  ;;(send *ri* :angle-vector
-  ;;	(send *fetch* :inverse-kinematics
-  ;;	      (make-coords :pos #f(450 -400 1100))) 5000)
-  ;;(send *ri* :wait-interpolation)
-  ;;(send *ri* :angle-vector #f(13.4507 -67.0325 6.62849 -103.939 97.1639 3.2024 95.9892 -104.716 8.0667 1.39715))
-  ;;(send *ri* :wait-interpolation)
 
   ;;腕をしまう
   (send *ri* :angle-vector
 	(send *fetch* :reset-pose) 3000)
   (send *ri* :wait-interpolation)
   
-  ;;印鑑を押し終わったら、トピック"go_to_room"で行き先の部屋番号を伝える
-  ;;(部屋番号の決定方法はまだ考慮できていません(以下は73A2の例))
-  ;;(setq msg (instance std_msgs::string :init))
-  ;;(send msg :data (format nil "home-point"))
-  ;;(ros::ros-info "msg [~A]" (send msg :data))
-  ;;(ros::publish "go_to_room" msg))
-
   (setq msg (instance std_msgs::string :init))
   (send msg :data (format nil "go"))
   (ros::ros-info "inkan finished")
   (ros::publish "pick_up" msg))
-
 
 ;;トピック"delivery"でメッセージを受信した時のコールバック関数
 ;;メッセージの内容が"ok"ならば、印鑑を押すフェーズへ
@@ -113,11 +79,6 @@
     (print delivery)
     (if (string= delivery "ok")
 	(inkan))))
-
-;;(do-until-key
-;; (ros::subscribe "received" std_msgs::string #'task2-cb)
-;; (ros::spin())
-;;)
 
 (ros::subscribe "delivery" std_msgs::string #'task2-cb)
 (ros::spin)
